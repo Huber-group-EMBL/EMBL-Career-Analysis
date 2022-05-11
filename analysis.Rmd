@@ -102,7 +102,7 @@ mycols<-setNames(c("#D0D0CE","#E2E868","#F4C61F","#F49E17","#D41645","#734595","
 
 ### Plot (Figure 1B)
 
-```{r}
+```{r figure1B, fig.width=8, fig.height=4, dpi=200}
 #predoc
 predoc_cohort <- predoc %>%
   dplyr::group_by(gender, timepointLast) %>%
@@ -111,7 +111,8 @@ predoc_cohort <- predoc %>%
 a <- ggplot(predoc_cohort, aes(fill=timepointLast, y=count, x=gender),col=mycols) + 
   geom_bar( stat="identity", position="fill") + scale_fill_manual(values=c(mycols)) + 
   labs(x = "Gender", y="Proportion in each role") + 
-  theme_minimal(base_size=12)+ ggtitle("PhD students, current role") + 
+  theme_minimal(base_size = 16)+ ggtitle("PhD students,
+current role") + 
   theme(axis.title=element_text(size=12))+ theme(plot.title=element_text(size=12)) 
 
 
@@ -120,13 +121,15 @@ postdoc_cohort <- postdoc %>%
   dplyr::group_by(gender, timepointLast) %>%
   dplyr::summarise(count = n())
 
-ep <- ggplot(subset(postdoc_cohort,gender=="m"| gender=="f"), 
-             aes(fill=timepointLast, y=count, x=gender),col=mycols) + 
+ep <- ggplot(postdoc_cohort,  aes(fill=timepointLast, y=count, x=gender),col=mycols) + 
   geom_bar( stat="identity", position="fill") + 
   scale_fill_manual(values=c(mycols)) + 
   labs(x = "Gender", y="Proportion in each role") + 
-  theme_minimal(base_size=12) + ggtitle("Postdocs, current role") + 
-  theme(axis.title=element_text(size=12)) + theme(plot.title=element_text(size=12)) 
+  theme_minimal(base_size = 16) + ggtitle("Postdocs, 
+current role") + 
+  theme(axis.title=element_text(size=12)) + theme(plot.title=element_text(size=12))+
+  theme(legend.key.height = unit(1, 'lines'),legend.key.width = unit(0.4, 'lines'),legend.title = element_text(size=12), legend.text = element_text(size=12)) 
+
 
 # make legend
 g_legend <- function(a.gplot){
@@ -144,7 +147,7 @@ mylegend <- g_legend(ep)
 grid.arrange(arrangeGrob(a + theme(legend.position="none"),
                                ep + theme(legend.position="none"),
                                mylegend,
-                               nrow=1,widths=c(4,4,1)))
+                               nrow=1,widths=c(4,4,3)))
 ```
     
 ## Positions stratified by years after EMBL 
@@ -188,7 +191,7 @@ names(mycols)=c('','CV-gap','NonSci','NonRes','IndR','AcPD','AcOt', 'AcPI')
 
 ### Positions after five years (Figure 2A)
 
-```{r}
+```{r fig2A, fig.width=8, fig.height=4, dpi=200}
 #postdoc_5
 postdoc_cohort <- postdoc %>%
   dplyr::group_by(cohort, position_5) %>%
@@ -199,8 +202,11 @@ bp <- ggplot(postdoc_cohort[which(postdoc_cohort$position_5!=""),],
   geom_bar( stat="identity", position="fill") + 
   scale_fill_manual(values=mycols) + 
   labs(x = "cohort", y="Proportion in each role") + 
-  ggtitle("Postdocs, 5 years after EMBL")+ theme_minimal() + 
-  theme(plot.title = element_text(size=12))
+  ggtitle("Postdocs, 
+5 years after EMBL")+ theme_minimal(base_size = 16) + theme(axis.title=element_text(size=12)) + theme(plot.title = element_text(size=16), axis.text.x = element_text(size = 12,angle=45, hjust=1))+ 
+  theme(axis.title=element_text(size=12)) + theme(plot.title=element_text(size=12))+
+  theme(legend.key.height = unit(1, 'lines'),legend.key.width = unit(0.4, 'lines'),legend.title = element_text(size=12), legend.text = element_text(size=12)) 
+  
 
 #predoc_5
 predoc_cohort <- predoc %>%
@@ -211,7 +217,10 @@ b <- ggplot(predoc_cohort[which(predoc_cohort$position_5!=""),],
             aes(fill=position_5, y=count, x=cohort),col=mycols) + 
   geom_bar(stat="identity", position="fill") + 
   scale_fill_manual(values=mycols) + labs(x = "cohort", y="Proportion in each role") +
-  ggtitle("PhD students, 5 years after EMBL")+theme_minimal()+ theme(plot.title = element_text(size=12))
+  ggtitle("PhD students, 
+5 years after EMBL")+ theme_minimal(base_size = 16) + theme(axis.title=element_text(size=12)) + theme(plot.title = element_text(size=12), axis.text.x = element_text(size = 12,angle=45, hjust=1))+ 
+  theme(axis.title=element_text(size=12)) + theme(plot.title=element_text(size=12))+
+  theme(legend.key.height = unit(1, 'lines'),legend.key.width = unit(0.4, 'lines'),legend.title = element_text(size=12), legend.text = element_text(size=12)) 
 
 #extract legend
 g_legend<-function(a.gplot){
@@ -220,7 +229,7 @@ g_legend<-function(a.gplot){
   legend <- tmp$grobs[[leg]]
   return(legend)}
 
-for_legend <-b+theme(legend.position="right")
+for_legend <-bp+theme(legend.position="right")
 mylegend<-g_legend(for_legend)
 
 
@@ -231,7 +240,7 @@ grid.arrange(arrangeGrob(b + theme(legend.position="none"),
 ```
 
 ### Other time points (Supplementary Figure 2)
-```{r, fig.height=12, fig.width=8}
+```{r supp2, fig.height=20, fig.width=16, dpi=200}
 #postdoc_1
 postdoc_cohort <- postdoc %>%
   dplyr::group_by(cohort, position_1) %>%
@@ -243,8 +252,21 @@ ap <- ggplot(postdoc_cohort[which(postdoc_cohort$position_1!=""),],
   scale_fill_manual(values=mycols_pos1) + 
   labs(x = "cohort", y="Proportion in each role") + 
   ggtitle("Postdocs, 1 year after EMBL") + 
-  theme_minimal() + theme(plot.title = element_text(size=12))
-  
+  theme_minimal(base_size = 20) + theme(plot.title = element_text(size=16))
+
+#postdoc_5
+postdoc_cohort <- postdoc %>%
+  dplyr::group_by(cohort, position_5) %>%
+  dplyr::summarise(count = n())
+
+bp <- ggplot(postdoc_cohort[which(postdoc_cohort$position_5!=""),], 
+             aes(fill=position_5, y=count, x=cohort),col=mycols) + 
+  geom_bar( stat="identity", position="fill") + 
+  scale_fill_manual(values=mycols) + 
+  labs(x = "cohort", y="Proportion in each role") + 
+  ggtitle("Postdocs, 5 years after EMBL") + 
+  theme_minimal(base_size = 20) + theme(plot.title = element_text(size=16))
+
 #postdoc_9
 postdoc_cohort <- postdoc %>%
   dplyr::group_by(cohort, position_9) %>%
@@ -256,7 +278,7 @@ cp<-ggplot(postdoc_cohort[which(postdoc_cohort$position_9!=""),],
   scale_fill_manual(values=mycols) + 
   labs(x = "cohort", y="Proportion in each role") + 
   ggtitle("Postdocs, 9 years after EMBL") + 
-  theme_minimal() + theme(plot.title = element_text(size=12))
+  theme_minimal(base_size = 20) + theme(plot.title = element_text(size=16))
 
 #postdoc_13
 postdoc_cohort <- postdoc %>%
@@ -269,7 +291,7 @@ dp <- ggplot(postdoc_cohort[which(postdoc_cohort$position_13!=""),],
   scale_fill_manual(values=mycols) + 
   labs(x = "cohort", y="Proportion in each role") + 
   ggtitle("Postdocs, 13 years after EMBL") + 
-  theme_minimal()+ theme(plot.title = element_text(size=12))
+  theme_minimal(base_size = 20)+ theme(plot.title = element_text(size=16))
 
 #postdoc_17
 postdoc_cohort <- postdoc %>%
@@ -281,7 +303,7 @@ ep <- ggplot(postdoc_cohort[which(postdoc_cohort$position_17!=""),],
   geom_bar( stat="identity", position="fill") + scale_fill_manual(values=c(mycols)) +
   labs(x = "cohort", y="Proportion in each role") + 
   ggtitle("Postdocs, 17 years after EMBL")+ 
-  theme_minimal() + theme(plot.title = element_text(size=12))
+  theme_minimal(base_size = 20) + theme(plot.title = element_text(size=16))
 
 
 
@@ -294,8 +316,18 @@ a <- ggplot(predoc_cohort[which(predoc_cohort$position_1!=""),],
             aes(fill=position_1, y=count, x=cohort),col=mycols_pos1) + 
   geom_bar(stat="identity", position="fill") + scale_fill_manual(values=mycols_pos1) + 
   labs(x = "cohort", y="Proportion in each role") + ggtitle("PhD students, 1 year after EMBL") + 
-  theme_minimal() + theme(plot.title = element_text(size=12))
+  theme_minimal(base_size = 20) + theme(plot.title = element_text(size=16))
 
+#predoc_5
+predoc_cohort <- predoc %>%
+  dplyr::group_by(cohort, position_5) %>%
+  dplyr::summarise(count = n())
+
+b <- ggplot(predoc_cohort[which(predoc_cohort$position_5!=""),], 
+            aes(fill=position_5, y=count, x=cohort),col=mycols) + 
+  geom_bar(stat="identity", position="fill") + scale_fill_manual(values=mycols) + 
+  labs(x = "cohort", y="Proportion in each role") + ggtitle("PhD students, 5 years after EMBL") + 
+  theme_minimal(base_size = 20) + theme(plot.title = element_text(size=16))
 
 #predoc_9
 predoc_cohort <- predoc %>%
@@ -307,7 +339,7 @@ c <- ggplot(predoc_cohort[which(predoc_cohort$position_9!=""),],
   geom_bar( stat="identity", position="fill") + scale_fill_manual(values=mycols) + 
   labs(x = "cohort", y="Proportion in each role") + 
   ggtitle("PhD students, 9 years after EMBL") + 
-  theme_minimal() + theme(plot.title = element_text(size=12))
+  theme_minimal(base_size = 20) + theme(plot.title = element_text(size=16))
 
 #predoc_13
 predoc_cohort <- predoc %>%
@@ -318,7 +350,7 @@ d <- ggplot(predoc_cohort[which(predoc_cohort$position_13!=""),],
             aes(fill=position_13, y=count, x=cohort),col=mycols) + 
   geom_bar(stat="identity", position="fill") + scale_fill_manual(values=mycols) + 
   labs(x = "cohort", y="Proportion in each role") + ggtitle("PhD students, 13 years after EMBL") + 
-  theme_minimal() + theme(plot.title = element_text(size=12))
+  theme_minimal(base_size = 20) + theme(plot.title = element_text(size=16))
 
 #predoc_17
 predoc_cohort <- predoc %>%
@@ -329,7 +361,7 @@ e <- ggplot(predoc_cohort[which(predoc_cohort$position_17!=""),],
             aes(fill=position_17, y=count, x=cohort),col=mycols) + 
   geom_bar( stat="identity", position="fill") + scale_fill_manual(values=c(mycols)) + 
   labs(x = "cohort", y="Proportion in each role") + ggtitle("PhD students, 17 years after EMBL") + 
-  theme_minimal() + theme(plot.title = element_text(size=12))
+  theme_minimal(base_size = 20) + theme(plot.title = element_text(size=16))
 
 
 
@@ -355,52 +387,80 @@ otherCohort = read_csv("data/in_year_all.csv")
 my_col <- c("grey40","#3B6FB6")
 ```
 
-```{r, fig.width=18, fig.height=8}
-institions<-unique(otherCohort$institution)
+```{r fig2b, fig.width=6, fig.height=5, dpi=200}
 
-pList <- lapply(institions, function(i) {
-  
-  mydata <- melt(otherCohort[which (otherCohort$institution==i),], id=c("institution","Cohorts","ratio"))
+  mydata <- melt(otherCohort[which (otherCohort$institution=="Stanford University (SU) Bioscience | 2018 dataset."),], id=c("institution","Cohorts","Cohort_short","ratio", "ratio_text"))
   mydata$variable <- factor(mydata$variable , levels = c("EMBL", "NorthAmerica"))
   
-  levels(mydata$variable) <- c("EMBL", i)
-    plot_b<-ggplot(mydata, aes(x=Cohorts, y=value, fill=variable)) +geom_bar(position="dodge",stat="identity") +theme_bw(base_size = 16)+ylim(0,0.5) +
-    scale_fill_manual(values=c("#3B6FB6","grey40")) + theme(legend.position="top") 
+  levels(mydata$variable) <- c("EMBL", "Stanford University (SU) Bioscience | 2018 dataset.")
+    plot_b<-ggplot(mydata, aes(x=Cohorts, y=value, fill=variable)) +geom_bar(position="dodge",stat="identity") +theme_bw(base_size = 20)+ylim(0,0.5)  + theme(legend.position="top")+
+  guides(fill = guide_legend(nrow = 2, byrow = TRUE, title.position="top")) +labs(x = "cohort", y="Alumni in PI-like roles
+(proportion)")+ scale_fill_manual(values=c("#3B6FB6","grey40"),name = "Institution:")+  theme(legend.key.height = unit(0.6, 'lines'),legend.title = element_text(size=13), legend.text = element_text(size=13))
   
-  plot_d<-ggplot(mydata[ which(mydata$variable=='EMBL'),], aes(x=Cohorts, y=ratio)) +geom_point() +
-    theme_bw(base_size = 12)+ylim(-0.2,2.2)+geom_hline(yintercept = 1, linetype=3)
-  
-  width_count<-0.05+(0.075*length(unique(mydata$Cohorts)))
+  plot_d<-ggplot(mydata[ which(mydata$variable=='EMBL'),], aes(x=Cohort_short, y=ratio)) +geom_point() +
+    theme_bw(base_size = 12)+geom_hline(yintercept = 1, linetype=3)+
+ theme( axis.text.x = element_text(size = 10),plot.background = element_rect(fill = "grey90"))+labs(x = "cohort", y="EMBL / SU")+ scale_y_continuous(breaks=seq(0,2,1))+ coord_cartesian(ylim=c(-.2, 2.2))
   
   mydata_plot <-  ggdraw() +
     draw_plot(plot_b) +
-    draw_plot(plot_d, x = 0.65, y = .49, width = 0.3, height = .3)
+    draw_plot(plot_d, x = 0.72, y = .35, width= 0.25, height = .35)
+  
+  mydata_plot
+
+
+```
+
+
+```{r supp3, fig.width=16, fig.height=20, dpi=400}
+institions<-sort(unique(otherCohort$institution[otherCohort$institution!="Stanford University (SU) Bioscience | 2018 dataset."]))
+
+pList <- lapply(institions, function(i) {
+  
+  mydata <- melt(otherCohort[which (otherCohort$institution==i),], id=c("institution","Cohorts","Cohort_short","ratio","ratio_text"))
+  mydata$variable <- factor(mydata$variable , levels = c("EMBL", "NorthAmerica"))
+  yaxistext<-unique(mydata$ratio_text)
+  levels(mydata$variable) <- c("EMBL", i)
+    plot_b<-ggplot(mydata, aes(x=Cohorts, y=value, fill=variable)) +geom_bar(position="dodge",stat="identity") +theme_bw(base_size = 22)+ylim(0,0.5) +
+    theme(legend.position="top")+
+  guides(fill = guide_legend(nrow = 2, byrow = TRUE, title.position="left")) +labs(x = "cohort", y="Alumni in PI-like roles
+(proportion)")+ scale_fill_manual(values=c("#3B6FB6","grey40"),name = "Institution:")
+  
+  plot_d<-ggplot(mydata[ which(mydata$variable=='EMBL'),], aes(x=Cohort_short, y=ratio)) +geom_point() +
+    theme_bw(base_size = 16)+geom_hline(yintercept = 1, linetype=3)+
+ theme( axis.text.x = element_text(size = 14),plot.background = element_rect(fill = "grey90"))+labs(x = "cohort", y=yaxistext)+ scale_y_continuous(breaks=seq(0,2,1))+ coord_cartesian(ylim=c(-.2, 2.2))
+  
+  width_count<-0.05+(0.075*length(unique(mydata$Cohort_short)))
+  
+  mydata_plot <-  ggdraw() +
+    draw_plot(plot_b) +
+    draw_plot(plot_d, x = 0.7, y = .4, width = width_count, height = .3)
   
   mydata_plot
 })
 
-plot_grid(plotlist = pList, ncol=3)
+plot_grid(plotlist = pList, ncol=2)
 
 ```
+
 
 ## Kaplan-Meier plots of time to position, stratified by cohorts
 
 ### AcPI
-```{r km_AcPI_cohort,fig.width=6, fig.height=4}
+```{r km_AcPI_cohort,fig.width=6, fig.height=4, dpi=200}
 corhortOut <- plotCohort(careerData, "AcPI", showTable = FALSE)
 corhortOut$plot
 tab1_co <- corhortOut$table %>% mutate(Position = "AcPI")
 ```
 
 ### AcOt
-```{r km_AcOt_cohort,fig.width=6, fig.height=4}
+```{r km_AcOt_cohort,fig.width=6, fig.height=4, dpi=200}
 corhortOut <- plotCohort(careerData, "AcOt", showTable = FALSE)
 corhortOut$plot
 tab2_co <- corhortOut$table %>% mutate(Position = "AcOt")
 ```
 
 ### IndR
-```{r km_IndR_cohort,fig.width=6, fig.height=4}
+```{r km_IndR_cohort,fig.width=6, fig.height=4, dpi=200}
 corhortOut <- plotCohort(careerData, "IndR", showTable = FALSE)
 corhortOut$plot
 tab3_co <- corhortOut$table %>% mutate(Position = "IndR")
@@ -408,14 +468,14 @@ tab3_co <- corhortOut$table %>% mutate(Position = "IndR")
 
 
 ### NonRes
-```{r km_NonRes_cohort, fig.width=6, fig.height=4}
+```{r km_NonRes_cohort, fig.width=6, fig.height=4, dpi=200}
 corhortOut <- plotCohort(careerData, "NonRes", showTable = FALSE)
 corhortOut$plot
 tab4_co <- corhortOut$table %>% mutate(Position = "NonRes")
 ```
 
 ### NonSci
-```{r km_NonSci_cohort, fig.width=6, fig.height=4}
+```{r km_NonSci_cohort, fig.width=6, fig.height=4, dpi=200}
 corhortOut <- plotCohort(careerData, "NonSci", showTable = FALSE)
 corhortOut$plot
 tab5_co <- corhortOut$table %>% mutate(Position = "NonSci")
@@ -429,9 +489,8 @@ use_condaenv("r-reticulate")
 ```
 ### Color code for the Sankey diagram
 ```{r}
-colList <- list(AcPD = "#D41645", AcPhD = "#707372", AcOt = "#734595",
-             IndR = "#F49E17", NonRes = "#F4C61F", AcPI = "#3B6FB6",
-             NonSci = "#E2E868")
+colList <- list(NonSci = "#E2E868", NonRes = "#F4C61F",IndR = "#F49E17",AcPD = "#D41645", AcPhD = "#707372", AcOt = "#734595",  AcPI = "#3B6FB6")
+             
 dummyTab <- data.frame(var = names(colList), val = 1)
 g <- ggplot(dummyTab, aes(x=var, y=val, fill = var )) + geom_bar(stat="identity") +
   scale_fill_manual(values = colList, name = "role")
@@ -552,28 +611,34 @@ plotSankey(originalData, "CV_wasAcOt")
 
 
 Box-plot with overlaid dot-plot showing the distribution in calendar years between PhD conferral and start of first PI role for PhD alumni who defended in 1997-2012 who became a principal investigator within 9-years, and for whom we have a detailed career path (n=157).   
-```{r}
+```{r predocGL, fig.height=4, fig.width=6, dpi=200}
 mydatatime <- as.data.frame(tempdata) 
 mydatatime <- mydatatime[ which(mydatatime$completeness=="Complete CV" ), ]
 predoc_data <- mydatatime[ which(mydatatime$type_pre_postdoc=='predoc'), ]
 predoc_to2012 <- predoc_data[ which(predoc_data$to_year<2013), ]
 predoc_to2012_exit_GL <-predoc_to2012[ which(predoc_to2012$PhDtoGL<10& predoc_to2012$completeness=="Complete CV" ), ]
 predoc_to2012_exit_GL$cohort <- as.factor(predoc_to2012_exit_GL$cohort)
-predoc_to2012_exit_GL$gender <- as.factor(predoc_to2012_exit_GL$gender)
+
+stat <- t.test(predoc_to2012_exit_GL$PhDtoGL~predoc_to2012_exit_GL$cohort, var.equal = FALSE)[["p.value"]]
+f10 <- -log10(stat)
+fstat <- round (stat, f10 +3)
+fstat[stat<2.2e-16] <- "<2.2e-16"
+fstat <- paste("p=", fstat, " ", if (stat<0.05) {"*"},if (stat<0.001) {"*"},if (stat<0.0001) {"*"}, sep="")
+fstat <- toString(fstat)
+
+
 
 p <- ggboxplot(predoc_to2012_exit_GL, x="cohort", y="PhDtoGL", fill='#ffffff', color="grey58")
 p <- p + geom_dotplot(aes(predoc_to2012_exit_GL$cohort, predoc_to2012_exit_GL$PhDtoGL), 
                       binaxis='y', stackdir='center',stackratio=1.0, dotsize=0.25) + 
-  stat_summary(fun.y = "mean", geom = "point", color = "RED", shape=4, size=6) + 
-  stat_compare_means(method = "t.test", color="red", label = "p.format", label.y = 8, label.x.npc="middle") + 
-  ylim(0,10)+ labs(x="PhD cohort", y = "Calendar years, PhD defence to first PI role") + 
-  theme_classic(base_size = 12) + geom_hline(yintercept = 9,linetype="dashed")
+  stat_summary(fun.y = "mean", geom = "point", color = "RED", shape=4, size=10)  + 
+  theme_classic(base_size = 14) + geom_hline(yintercept = 9,linetype="dashed")+ scale_y_continuous(breaks=seq(0,9,3))+coord_cartesian(ylim=c(0, 10))+ggtitle(fstat)+theme(plot.title = element_text(size=12))
 p
 ```
 
 
 Box-plot with overlaid dot-plot showing the distribution in calendar years between completion of an EMBL postdoc and start of first PI role for postdoc alumni who completed their postdoc in 1997-2012 who became a principal investigator within 9-years, and for whom we have a detailed career path (n=182).  
-```{r}
+```{r postdocphdgl, fig.height=4, fig.width=6, dpi=200}
 # postdoc by cohort
 postdoc_data <- mydatatime[ which(mydatatime$type_pre_postdoc=='postdoc'), ]
 data_sum <- postdoc_data %>% dplyr::group_by(cohort,PhDtoGL) %>% dplyr::summarise(n = n())
@@ -583,27 +648,39 @@ postdoc_to2012_exit_GL$cohort <- as.factor(postdoc_to2012_exit_GL$cohort)
 postdoc_to2012_exit_GLEMBL <- postdoc_to2012[ which(postdoc_to2012$EMBLtoPI<10 & postdoc_to2012$completeness=="Complete CV" ), ]
 postdoc_to2012_exit_GLEMBL$cohort <- as.factor(postdoc_to2012_exit_GLEMBL$cohort)
 
+stat <- t.test(postdoc_to2012_exit_GLEMBL$EMBLtoPI~postdoc_to2012_exit_GLEMBL$cohort, var.equal = FALSE)[["p.value"]]
+f10 <- -log10(stat)
+fstat <- round (stat, f10 +3)
+fstat[stat<2.2e-16] <- "<2.2e-16"
+fstat <- paste("p=", fstat, " ", if (stat<0.05) {"*"},if (stat<0.001) {"*"},if (stat<0.0001) {"*"}, sep="")
+fstat <- toString(fstat)
+
 p <- ggboxplot(postdoc_to2012_exit_GLEMBL, x="cohort", y="EMBLtoPI", fill='#ffffff', color="grey58")
 p <- p + geom_dotplot(aes(postdoc_to2012_exit_GLEMBL$cohort, postdoc_to2012_exit_GLEMBL$EMBLtoPI), 
-                      binaxis='y', stackdir='center',stackratio=1.0, dotsize=0.25) + 
-  stat_summary(fun.y = "mean", geom = "point", color = "RED", shape=4, size=6) + 
-  stat_compare_means( method = "t.test", color="red", label = "p.format", label.y = 8, label.x.npc="middle") + 
-  ylim(0,10) + labs(x="Postdoc cohort", y = "Calendar years, EMBL to first PI role") + 
-  theme_classic(base_size = 12) + geom_hline(yintercept = 9,linetype="dashed")
+                      binaxis='y', stackdir='center',stackratio=1.0, dotsize=0.25) +
+  stat_summary(fun.y = "mean", geom = "point", color = "RED", shape=4, size=10)  + 
+  theme_classic(base_size = 14) + geom_hline(yintercept = 9,linetype="dashed")+ scale_y_continuous(breaks=seq(0,9,3))+coord_cartesian(ylim=c(0, 10))+ggtitle(fstat)+theme(plot.title = element_text(size=12))
 p
 ```
 
  
 Same as above but for postdoc alumni for whom we were able to identify a PhD conferral year
-```{r}
+```{r figpostdocGL,  fig.height=4, fig.width=6, dpi=200}
+stat <- t.test(postdoc_to2012_exit_GL$PhDtoGL~postdoc_to2012_exit_GL$cohort, var.equal = FALSE)[["p.value"]]
+
+f10 <- -log10(stat)
+fstat <- round (stat, f10 +3)
+fstat[stat<2.2e-16] <- "<2.2e-16"
+fstat <- paste("p=", fstat, " ", if (stat<0.05) {"*"},if (stat<0.001) {"*"},if (stat<0.0001) {"*"}, sep="")
+fstat <- toString(fstat)
+
 p <- ggboxplot(postdoc_to2012_exit_GL, x="cohort", y="PhDtoGL", fill='#ffffff', color="grey58")
 p <- p + geom_dotplot(aes(postdoc_to2012_exit_GL$cohort, postdoc_to2012_exit_GL$PhDtoGL), 
                       binaxis='y', stackdir='center',stackratio=1.0, dotsize=0.25)+
-  stat_summary(fun.y = "mean", geom = "point", color = "RED", shape=4, size=6) + 
-  stat_compare_means(method = "t.test", color="red", label = "p.format", label.y = 8, label.x.npc="middle") + 
-  ylim(0,10) + labs(x="Postdoc cohort", y = "Calendar years, PhD to first PI role") + 
-  theme_classic(base_size = 12)+geom_hline(yintercept = 9,linetype="dashed")
+  stat_summary(fun.y = "mean", geom = "point", color = "RED", shape=4, size=10)  + labs(x="Postdoc cohort", y = "Calendar years, PhD to first PI role") + 
+  theme_classic(base_size = 14)+geom_hline(yintercept = 9,linetype="dashed")+ scale_y_continuous(breaks=seq(0,9,3))+coord_cartesian(ylim=c(0, 10))+ggtitle(fstat)+theme(plot.title = element_text(size=12))
 p
+
 
 ```
 
@@ -615,7 +692,7 @@ p
 Histograms of the number of first author EMBL publications per ECR for alumni who have not (yet) become a PI (PI) and those who became a PI.  
 
 Plot
-```{r, fig.height=5, fig.width=5}
+```{r fig3a, fig.height=4, fig.width=5, dpi=200}
 mydata <- as.data.frame(tempdata) 
 mydata$was_GL = replace_na(mydata$was_GL,"n")
 
@@ -626,26 +703,27 @@ p <- ggplot(mydata, aes(x=pubs_FIRST_ra_only_TOTAL)) +
   geom_histogram(binwidth=1, colour="black", fill="grey80") + facet_grid(was_GL ~ .) +
   theme(strip.text.y = element_text(angle = 0)) + 
   labs(x = "# first-author research articles", y="number of alumni") +
-  theme_bw(base_size = 12)
+  theme_bw(base_size = 16)
 
 p<- p +  geom_vline(data=filter(df_mean, was_GL=="n"), 
                     aes(xintercept=meant), colour="red",linetype="dashed") + 
   geom_vline(data=filter(df_mean, was_GL=="y"), aes(xintercept=meant), colour="red",linetype="dashed")
 
-p <- p +  geom_text(data=filter(df_mean, was_GL=="n"), aes(label = round(meant,2), x = meant, y = 400),  
+p <- p +  geom_text(data=filter(df_mean, was_GL=="n"), aes(label = round(meant,1), x = meant, y = 400),  
                     size=6,colour="red", angle=-90, vjust = -1) +  
-  geom_text(data=filter(df_mean, was_GL=="y"), aes(label = round(meant,2), x = meant, y = 400),
+  geom_text(data=filter(df_mean, was_GL=="y"), aes(label = round(meant,1), x = meant, y = 400),
             size=6,colour="red", angle=-90, vjust = -1) + xlim(-0.5,upper_lim+0.5)
 
 #do t.test and extract p-value
-stat <- t.test(mydata$pubs_FIRST_ra_only_TOTAL~mydata$was_GL)[["p.value"]]
+stat <- t.test(mydata$pubs_FIRST_ra_only_TOTAL~mydata$was_GL, var.equal = FALSE)[["p.value"]]
 f10 <- -log10(stat)
-stat <- round (stat, f10 +3)
-fstat <- paste("p=", stat, " ", if (stat<0.05) {"*"},if (stat<0.001) {"*"},if (stat<0.0001) {"*"}, sep="")
+fstat <- round (stat, f10 +3)
+fstat[stat<2.2e-16] <- "<2.2e-16"
+fstat <- paste("p=", fstat, " ", if (stat<0.05) {"*"},if (stat<0.001) {"*"},if (stat<0.0001) {"*"}, sep="")
 fstat <- toString(fstat)
 
 #plot
-p <- p + ggtitle(fstat)
+p <- p + ggtitle(fstat)+theme(plot.title = element_text(size=12), axis.text=element_text(size=12))
 p
 
 ```
@@ -664,7 +742,7 @@ summary_stats <-group_by(mydata, was_GL) %>%
 
 Histograms of the natural logarithm of the highest category normalized citation of first author EMBL publications per ECR publishing at least one first author paper linked to EMBL and with a CNCI value in Clarivate InCites’ database) for alumni who have not (yet) become a PI (PI) and those who became a PI. 
 
-```{r,  fig.height=5, fig.width=5}
+```{r fig3b,  fig.height=4, fig.width=5, dpi=200}
 df_mean <- mydata %>% group_by(was_GL) %>% summarise(meant = mean(pubs_FIRST_RA_CNCI_max, na.rm=TRUE))
 df_mean
 
@@ -672,28 +750,29 @@ p <- ggplot(mydata, aes(x=log(pubs_FIRST_RA_CNCI_max))) +
   geom_histogram(binwidth=1, colour="black", fill="grey80") +facet_grid(was_GL ~ .) +
   theme(strip.text.y = element_text(angle = 0)) + 
   labs(x = "log(max CNCI, first-author research articles)", y="number of alumni")+
-  theme_bw(base_size = 12)
+  theme_bw(base_size = 16)
 
 p<- p +  
   geom_vline(data=filter(df_mean, was_GL=="n"), aes(xintercept=log(meant)), colour="red",linetype="dashed") + 
   geom_vline(data=filter(df_mean, was_GL=="y"), aes(xintercept=log(meant)), colour="red",linetype="dashed")
 
 p<- p +  geom_vline(aes(xintercept=log(1)), colour="black") 
-p<- p +  geom_text(data=filter(df_mean, was_GL=="n"), aes(label = round(meant,2), x = log(meant), y = 250),  
+p<- p +  geom_text(data=filter(df_mean, was_GL=="n"), aes(label = paste0("log(",round(meant,1),")"), x = log(meant), y = 250),  
                   size=6,colour="red", angle=-90, vjust = -1) +  
-  geom_text(data=filter(df_mean, was_GL=="y"), aes(label = round(meant,2), x = log(meant), y = 250),
+  geom_text(data=filter(df_mean, was_GL=="y"), aes(label = paste0("log(",round(meant,1),")"), x = log(meant), y = 250),
             size=6,colour="red", angle=-90, vjust = -1) 
 
 
 #do t.test and extract p-value
-stat<-t.test(mydata$pubs_FIRST_RA_CNCI_max~mydata$was_GL)[["p.value"]]
+stat<-t.test(mydata$pubs_FIRST_RA_CNCI_max~mydata$was_GL, var.equal = FALSE)[["p.value"]]
 f10 <- -log10(stat)
-stat <-round (stat, f10 +3)
-fstat<-paste("p=", stat, " ", if (stat<0.05) {"*"},if (stat<0.001) {"*"},if (stat<0.0001) {"*"}, sep="")
+fstat <- round (stat, f10 +3)
+fstat[stat<2.2e-16] <- "<2.2e-16"
+fstat <- paste("p=", fstat, " ", if (stat<0.05) {"*"},if (stat<0.001) {"*"},if (stat<0.0001) {"*"}, sep="")
 fstat <- toString(fstat)
 
 #plot
-p<-p + ggtitle(fstat)
+p<-p + ggtitle(fstat)+theme(plot.title = element_text(size=12), axis.text=element_text(size=12))
 p
 ```
 
@@ -737,7 +816,7 @@ print(table(filter(testTab, ifPos)$type_pre_postdoc))
 
 Plot KM curves stratified by pre-postdoc
 
-```{r km_AcPI_PubNum, fig.height=4, fig.width=8}
+```{r km_AcPI_PubNum, fig.height=4, fig.width=8, dpi=200}
 
 plotOut <- km(testTab, "numPub",  maxTime = 25, titlePlot = "",
        titleLegend = "Number of\nfirst-author\npublications",
@@ -754,7 +833,7 @@ plotOut
 ## Quantify the power of predictors using Harrells’ C-Index (Figure 3C)
 
 ### AcPI
-```{r HC_both_AcPI, fig.height=6, fig.width=8, cache=TRUE}
+```{r HC_both_AcPI, fig.height=5, fig.width=6, cache=TRUE, dpi=200}
 p <- plotHarrelsC(careerData, "AcPI", preOrPost = "both")
 p$plot
 tabOut <- p$table
@@ -768,14 +847,14 @@ tab1 <- pubOut$table %>% mutate(Position = "AcPI")
 ## Number of publications as a predictor, stratified by PhD and postdocs (Figure 4C and Supplementary Figure 5)
 
 ### AcOt
-```{r km_AcOt_numPub,fig.width=6, fig.height=4}
+```{r km_AcOt_numPub,fig.width=6, fig.height=4, dpi=200}
 pubOut <- plotPublication(careerData, "AcOt", showTable = FALSE)
 pubOut$plot
 tab2 <- pubOut$table %>% mutate(Position = "AcOt")
 ```
 
 ### IndR
-```{r km_IndR_numPub,fig.width=6, fig.height=4}
+```{r km_IndR_numPub,fig.width=6, fig.height=4, dpi=200}
 pubOut <- plotPublication(careerData, "IndR", showTable = FALSE)
 pubOut$plot
 tab3 <- pubOut$table %>% mutate(Position = "IndR")
@@ -783,14 +862,14 @@ tab3 <- pubOut$table %>% mutate(Position = "IndR")
 
 
 ### NonRes
-```{r km_NonRes_numPub, fig.width=6, fig.height=4}
+```{r km_NonRes_numPub, fig.width=6, fig.height=4, dpi=200}
 pubOut <- plotPublication(careerData, "NonRes", showTable = FALSE)
 pubOut$plot
 tab4 <- pubOut$table %>% mutate(Position = "NonRes")
 ```
 
 ### NonSci
-```{r km_NonSci_numPub, fig.width=6, fig.height=4}
+```{r km_NonSci_numPub, fig.width=6, fig.height=4, dpi=200}
 putOut <- plotPublication(careerData, "NonSci", showTable = FALSE)
 putOut$plot
 tab5 <- putOut$table %>% mutate(Position = "NonSci")
@@ -799,28 +878,28 @@ tab5 <- putOut$table %>% mutate(Position = "NonSci")
 ## Quantify the power of predictors using Harrells’ C-Index (Figure 4A,B,D,E)
 
 ### AcOt
-```{r HC_both_AcOt, fig.height=6, fig.width=8, cache=TRUE}
+```{r HC_both_AcOt, fig.height=5, fig.width=6, cache=TRUE, dpi=200}
 p <- plotHarrelsC(careerData, "AcOt", preOrPost = "both")
 p$plot
 tabOut <- bind_rows(tabOut, p$table)
 ```
 
 ### IndR
-```{r HC_both_IndR, fig.height=6, fig.width=8, cache=TRUE}
+```{r HC_both_IndR, fig.height=5, fig.width=6, cache=TRUE, dpi=200}
 p <- plotHarrelsC(careerData, "IndR", preOrPost = "both")
 p$plot
 tabOut <- bind_rows(tabOut, p$table)
 ```
 
 ### NonRes
-```{r HC_both_NonRes, fig.height=6, fig.width=8, cache=TRUE}
+```{r HC_both_NonRes, fig.height=5, fig.width=6, cache=TRUE, dpi=200}
 p <- plotHarrelsC(careerData, "NonRes", preOrPost = "both")
 p$plot
 tabOut <- bind_rows(tabOut, p$table)
 ```
 
 ### NonSci
-```{r HC_both_NonSci, fig.height=6, fig.width=8, cache=TRUE}
+```{r HC_both_NonSci, fig.height=5, fig.width=6, cache=TRUE, dpi=200}
 p <- plotHarrelsC(careerData, "NonSci", preOrPost = "both")
 p$plot
 tabOut <- bind_rows(tabOut, p$table)
@@ -833,15 +912,15 @@ tabOut <- bind_rows(tabOut, p$table)
 
 ## Figure 5B and 5C
 
-```{r, fig.height=4, fig.width=6}
+```{r fig5B, fig.height=4, fig.width=5, dpi=200}
 #Cohort vs ra articles - boxplot 
 #do anova on all data, extract p-value
 
 stat<-aov(tempdata$pubs_RAonly_TOTAL~tempdata$cohort)
 stat<- summary(stat)[[1]][["Pr(>F)"]][[1]]
 f10 <- -log10(stat)
-stat <-round (stat, f10 +3)
-fstat<-paste("ANOVA p=", stat, " ", if (stat<0.05) {"*"},if (stat<0.001) {"*"},if (stat<0.0001) {"*"}, sep="")
+fstat <-round (stat, f10 +3)
+fstat<-paste("ANOVA p=", fstat, " ", if (stat<0.05) {"*"},if (stat<0.001) {"*"},if (stat<0.0001) {"*"}, sep="")
 fstat <- toString(fstat)
 
 levels(tempdata$cohort)
@@ -850,10 +929,10 @@ upper_lim<-quantile(tempdata$pubs_RAonly_TOTAL, 0.975)
 p1 <- ggplot(tempdata, aes(x=cohort, y=pubs_RAonly_TOTAL)) + 
   geom_boxplot(lwd=0.5,color="grey40", fill="grey100",  width=0.5)+
   stat_summary(fun.y = "mean", geom = "point",shape=4, color="red",size=4) + 
-  theme_classic(base_size = 12) +
+  theme_classic(base_size = 14) +
   theme(panel.grid.major=element_line(colour="grey90")) +
   labs(x = "cohort", y="# research articles")
-p1<-p1+ ggtitle(fstat)+ylim(0,upper_lim)
+p1<-p1+ ggtitle(fstat)+ylim(0,upper_lim)+ theme(plot.title=element_text(size=12)) 
 p1
 upper_lim<-quantile(tempdata$pubs_RAonly_TOTAL, 0.975)
 
@@ -862,25 +941,25 @@ upper_lim<-quantile(tempdata$pubs_RAonly_TOTAL, 0.975)
 stat<-aov(tempdata$pubs_FIRST_ra_only_TOTAL~tempdata$cohort)
 stat<- summary(stat)[[1]][["Pr(>F)"]][[1]]
 f10 <- -log10(stat)
-stat <-round (stat, f10 +3)
-fstat<-paste("ANOVA p=", stat, " ", if (stat<0.05) {"*"},if (stat<0.001) {"*"},if (stat<0.0001) {"*"}, sep="")
+fstat <-round (stat, f10 +3)
+fstat<-paste("ANOVA p=", fstat, " ", if (stat<0.05) {"*"},if (stat<0.001) {"*"},if (stat<0.0001) {"*"}, sep="")
 fstat <- toString(fstat)
 #plot, excluding long-tail outliers
 upper_lim<-quantile(tempdata$pubs_FIRST_ra_only_TOTAL, 0.975)
 p2 <- ggplot(tempdata, aes(x=cohort, y=pubs_FIRST_ra_only_TOTAL)) + 
   geom_boxplot(lwd=0.5,color="grey40", fill="grey100",  width=0.5)+
   stat_summary(fun.y = "mean", geom = "point",shape=4, color="red",size=4) + 
-  theme_classic(base_size = 12) +
+  theme_classic(base_size = 14) +
   theme(panel.grid.major=element_line(colour="grey90")) +
   labs(x = "cohort", y="# first-author research articles")
-p2<-p2+ ggtitle(fstat)+ylim(0,upper_lim)
+p2<-p2+ ggtitle(fstat)+ylim(0,upper_lim)+ theme(plot.title=element_text(size=12)) 
 p2
 
 ```
 
 
 ## Figure 5A and 5D
-```{r, fig.height=4, fig.width=6}
+```{r fig5ab, fig.height=4, fig.width=5, dpi=200}
 pubdata <- read_csv("data/WOSpapers_unique.csv") %>%
   rename_with(make.names)
 
@@ -899,8 +978,10 @@ a<- dplyr::group_by(pubdata_art, Publication.Date) %>%
 # Create Line Chart
 p <- ggplot(a, aes(Publication.Date, y=wmean)) + geom_point(color = "black") + 
   ylim(0,12)+ xlim(1995,2020) + 
-  labs(x="Year", y = "Winsorized mean,number of authors per paper") + 
-  theme_classic(base_size=12)+theme(panel.grid.major=element_line(colour="grey90"))
+  labs(x="Year", y = "Winsorized mean,
+number of authors 
+per paper") + 
+  theme_classic(base_size = 14)+theme(panel.grid.major=element_line(colour="grey90"))
 
 p
 
@@ -915,8 +996,10 @@ b <- dplyr::group_by(pubdata_art, Publication.Date) %>%
 
 
 p <- ggplot(b, aes(Publication.Date, y=mean)) + geom_point(color = "black") + 
-  ylim(0,6) + xlim(1995,2020) + labs(x="Year", y = "mean, Category Normalized Citation Impact") +
-  theme_classic(base_size=12)+theme(panel.grid.major=element_line(colour="grey90"))
+  ylim(0,6) + xlim(1995,2020) + labs(x="Year", y = "mean, 
+Category Normalized 
+Citation Impact") +
+  theme_classic(base_size = 14)+theme(panel.grid.major=element_line(colour="grey90"))
 p
 ```
 
