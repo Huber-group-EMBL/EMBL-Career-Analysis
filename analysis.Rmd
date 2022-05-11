@@ -645,7 +645,7 @@ data_sum <- postdoc_data %>% dplyr::group_by(cohort,PhDtoGL) %>% dplyr::summaris
 postdoc_to2012 <- postdoc_data[ which(postdoc_data$to_year<2013), ]
 postdoc_to2012_exit_GL <- postdoc_to2012[ which(postdoc_to2012$PhDtoGL<10 & postdoc_to2012$completeness=="Complete CV" ), ]
 postdoc_to2012_exit_GL$cohort <- as.factor(postdoc_to2012_exit_GL$cohort)
-postdoc_to2012_exit_GLEMBL <- postdoc_to2012[ which(postdoc_to2012$EMBLtoPI<10 & postdoc_to2012$completeness=="Complete CV" ), ]
+postdoc_to2012_exit_GLEMBL <- postdoc_to2012[ which(postdoc_to2012$EMBLtoPI<10 & postdoc_to2012$EMBLtoPI>-1  & postdoc_to2012$completeness=="Complete CV" ), ]
 postdoc_to2012_exit_GLEMBL$cohort <- as.factor(postdoc_to2012_exit_GLEMBL$cohort)
 
 stat <- t.test(postdoc_to2012_exit_GLEMBL$EMBLtoPI~postdoc_to2012_exit_GLEMBL$cohort, var.equal = FALSE)[["p.value"]]
