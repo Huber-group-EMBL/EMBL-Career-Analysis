@@ -637,7 +637,7 @@ p
 ```
 
 
-Box-plot with overlaid dot-plot showing the distribution in calendar years between completion of an EMBL postdoc and start of first PI role for postdoc alumni who completed their postdoc in 1997-2012 who became a principal investigator within 9-years, and for whom we have a detailed career path (n=182).  
+Box-plot with overlaid dot-plot showing the distribution in calendar years between completion of an EMBL postdoc and start of first PI role for postdoc alumni who completed their postdoc in 1997-2012 who became a principal investigator within 9-years, and for whom we have a detailed career path (n=218).  
 ```{r postdocphdgl, fig.height=4, fig.width=6, dpi=200}
 # postdoc by cohort
 postdoc_data <- mydatatime[ which(mydatatime$type_pre_postdoc=='postdoc'), ]
@@ -645,7 +645,7 @@ data_sum <- postdoc_data %>% dplyr::group_by(cohort,PhDtoGL) %>% dplyr::summaris
 postdoc_to2012 <- postdoc_data[ which(postdoc_data$to_year<2013), ]
 postdoc_to2012_exit_GL <- postdoc_to2012[ which(postdoc_to2012$PhDtoGL<10 & postdoc_to2012$completeness=="Complete CV" ), ]
 postdoc_to2012_exit_GL$cohort <- as.factor(postdoc_to2012_exit_GL$cohort)
-postdoc_to2012_exit_GLEMBL <- postdoc_to2012[ which(postdoc_to2012$EMBLtoPI<10 & postdoc_to2012$EMBLtoPI>-1  & postdoc_to2012$completeness=="Complete CV" ), ]
+postdoc_to2012_exit_GLEMBL <- postdoc_to2012[ which(postdoc_to2012$EMBLtoPI<10 & postdoc_to2012$EMBLtoPI>-1 & postdoc_to2012$completeness=="Complete CV" ), ]
 postdoc_to2012_exit_GLEMBL$cohort <- as.factor(postdoc_to2012_exit_GLEMBL$cohort)
 
 stat <- t.test(postdoc_to2012_exit_GLEMBL$EMBLtoPI~postdoc_to2012_exit_GLEMBL$cohort, var.equal = FALSE)[["p.value"]]
@@ -719,7 +719,7 @@ stat <- t.test(mydata$pubs_FIRST_ra_only_TOTAL~mydata$was_GL, var.equal = FALSE)
 f10 <- -log10(stat)
 fstat <- round (stat, f10 +3)
 fstat[stat<2.2e-16] <- "<2.2e-16"
-fstat <- paste("p=", fstat, " ", if (stat<0.05) {"*"},if (stat<0.001) {"*"},if (stat<0.0001) {"*"}, sep="")
+fstat <- paste("p=", fstat, " ",  if (stat<0.05) {"*"},if (stat<0.001) {"*"},if (stat<0.0001) {"*"}, sep="")
 fstat <- toString(fstat)
 
 #plot
