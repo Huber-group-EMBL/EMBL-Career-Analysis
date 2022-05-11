@@ -1,19 +1,49 @@
-Cohorts,NorthAmerica,EMBL,institution,ratio
-2003-2007,0.362179487,0.258064516,University of Chicago,0.712532115
-2008-2012,0.191740413,0.137777778,University of Chicago,0.718564104
-2003-2007,0.264705882,0.281553398,University of Michigan,1.063646172
-2008-2012,0.086065574,0.075117371,University of Michigan,0.872792308
-2002-2004,0.33093525,0.391666667,Stanford University in 2013,1.1835145
-2007-2009,0.04733728,0.095588235,Stanford University in 2013,2.019301384
-2000-2005,0.34037559,0.371428571,Stanford University in 2019,1.091231516
-2006-2010,0.26751592,0.224215247,Stanford University in 2019,0.838137958
-2011-2015,0.12524851,0.106837607,Stanford University in 2019,0.853005014
-2000-2003,0.30525,0.39394,University of Toronto,1.290548731
-2004-2007,0.24877,0.28488,University of Toronto,1.145154158
-2008-2011,0.18093,0.12941,University of Toronto,0.715248991
-"02-06
-10-yrs",0.247457627,0.343283582,"University of California, San Francisco",1.387241873
-"02-06
-5-yrs",0.077966102,0.164179104,"University of California, San Francisco",2.10577547
-"07-11
-5-yrs",0.05859375,0.069124424,"University of California, San Francisco",1.179723502
+Cohorts,Cohort_short,NorthAmerica,EMBL,institution,ratio,ratio_text
+2003-2007,"'03-
+'07",0.362179487,0.258064516,"University of Chicago (UC)
+Bioscience in 2019",0.712532115,EMBL / UoC
+2008-2012,"'08-
+'12",0.191740413,0.137777778,"University of Chicago (UC)
+Bioscience in 2019",0.718564104,EMBL / UoC
+2003-2007,"'03-
+'07",0.264705882,0.281553398,"University of Michigan (UoM)
+Selected Departments | 5 or 10 years",1.063646172,EMBL / UoM
+2008-2012,"'08-
+'12",0.086065574,0.075117371,"University of Michigan (UoM)
+Selected Departments | 5 or 10 years",0.872792308,EMBL / UoM
+2002-2004,"'02-
+'04",0.33093525,0.391666667,"Stanford University (SU)
+Bioscience | 2013 dataset.",1.1835145,EMBL / SU
+2007-2009,"'07- 
+'09",0.04733728,0.095588235,"Stanford University (SU)
+Bioscience | 2013 dataset.",2.019301384,EMBL / SU
+2000-2005,"'00-
+'05",0.34037559,0.371428571,Stanford University (SU) Bioscience | 2018 dataset.,1.091231516,EMBL / SU
+2006-2010,"'06- 
+'10",0.26751592,0.224215247,Stanford University (SU) Bioscience | 2018 dataset.,0.838137958,EMBL / SU
+2011-2015,"'11-
+'15",0.12524851,0.106837607,Stanford University (SU) Bioscience | 2018 dataset.,0.853005014,EMBL / SU
+2000-2003,"'00-
+ '03",0.30525,0.39394,"University of Toronto (UoT)
+Life Science Division in 2016",1.290548731,EMBL / UoT
+2004-2007,"'04-
+'07",0.24877,0.28488,"University of Toronto (UoT)
+Life Science Division in 2016",1.145154158,EMBL / UoT
+2008-2011,"'08-
+'11",0.18093,0.12941,"University of Toronto (UoT)
+Life Science Division in 2016",0.715248991,EMBL / UoT
+"2002-2006
+10-yrs","'02-
+'06
+10-yrs",0.247457627,0.343283582,"University of California, San Francisco (UCSF)
+Basic Sciences 5 or 10 years",1.387241873,EMBL / UCSF
+"2002-2006
+5-yrs","'02-
+'06
+5-yrs",0.077966102,0.164179104,"University of California, San Francisco (UCSF)
+Basic Sciences 5 or 10 years",2.10577547,EMBL / UCSF
+"2007-2011
+5-yrs","'07-
+'11
+5-yrs",0.05859375,0.069124424,"University of California, San Francisco (UCSF)
+Basic Sciences 5 or 10 years",1.179723502,EMBL / UCSF
