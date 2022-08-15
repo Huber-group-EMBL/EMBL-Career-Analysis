@@ -31,7 +31,7 @@ library(tidyverse)
 library(reticulate)
 #load helper functions
 source("code/utils.R")
-
+knitr::opts_chunk$set(fig.path = "./fig/", dev = c("png","pdf"))
 #silent warnings and messages
 knitr::opts_chunk$set(warning = FALSE, message = FALSE, autodep = TRUE)
 ```
@@ -447,21 +447,21 @@ plot_grid(plotlist = pList, ncol=2)
 
 ### AcPI
 ```{r km_AcPI_cohort,fig.width=6, fig.height=4, dpi=200}
-corhortOut <- plotCohort(careerData, "AcPI", showTable = FALSE)
+corhortOut <- plotCohort(careerData, "AcPI", showTable = FALSE, maxY=0.5, legendPos = "bottom")
 corhortOut$plot
 tab1_co <- corhortOut$table %>% mutate(Position = "AcPI")
 ```
 
 ### AcOt
 ```{r km_AcOt_cohort,fig.width=6, fig.height=4, dpi=200}
-corhortOut <- plotCohort(careerData, "AcOt", showTable = FALSE)
+corhortOut <- plotCohort(careerData, "AcOt", showTable = FALSE, maxY = 0.5, legendPos = "bottom")
 corhortOut$plot
 tab2_co <- corhortOut$table %>% mutate(Position = "AcOt")
 ```
 
 ### IndR
 ```{r km_IndR_cohort,fig.width=6, fig.height=4, dpi=200}
-corhortOut <- plotCohort(careerData, "IndR", showTable = FALSE)
+corhortOut <- plotCohort(careerData, "IndR", showTable = FALSE, maxY=0.5, legendPos = "top")
 corhortOut$plot
 tab3_co <- corhortOut$table %>% mutate(Position = "IndR")
 ```
@@ -469,16 +469,55 @@ tab3_co <- corhortOut$table %>% mutate(Position = "IndR")
 
 ### NonRes
 ```{r km_NonRes_cohort, fig.width=6, fig.height=4, dpi=200}
-corhortOut <- plotCohort(careerData, "NonRes", showTable = FALSE)
+corhortOut <- plotCohort(careerData, "NonRes", showTable = FALSE, maxY=0.5, legendPos = "top")
 corhortOut$plot
 tab4_co <- corhortOut$table %>% mutate(Position = "NonRes")
 ```
 
 ### NonSci
 ```{r km_NonSci_cohort, fig.width=6, fig.height=4, dpi=200}
-corhortOut <- plotCohort(careerData, "NonSci", showTable = FALSE)
+corhortOut <- plotCohort(careerData, "NonSci", showTable = FALSE, maxY=0.5, legendPos = "top")
 corhortOut$plot
 tab5_co <- corhortOut$table %>% mutate(Position = "NonSci")
+```
+
+
+## Kaplan-Meier plots of time to position, stratified by gender
+
+### AcPI
+```{r km_AcPI_gender,fig.width=6, fig.height=4, dpi=200}
+corhortOut <- plotGender(careerData, "AcPI", showTable = FALSE, maxY=0.5, legendPos = "bottom")
+corhortOut$plot
+tab1_gender <- corhortOut$table %>% mutate(Position = "AcPI")
+```
+
+### AcOt
+```{r km_AcOt_gender,fig.width=6, fig.height=4, dpi=200}
+corhortOut <- plotGender(careerData, "AcOt", showTable = FALSE, maxY = 0.5, legendPos = "bottom")
+corhortOut$plot
+tab2_gender <- corhortOut$table %>% mutate(Position = "AcOt")
+```
+
+### IndR
+```{r km_IndR_gender,fig.width=6, fig.height=4, dpi=200}
+corhortOut <- plotGender(careerData, "IndR", showTable = FALSE, maxY=0.5, legendPos = "top")
+corhortOut$plot
+tab3_gender <- corhortOut$table %>% mutate(Position = "IndR")
+```
+
+
+### NonRes
+```{r km_NonRes_gender, fig.width=6, fig.height=4, dpi=200}
+corhortOut <- plotGender(careerData, "NonRes", showTable = FALSE, maxY=0.5, legendPos = "top")
+corhortOut$plot
+tab4_gender <- corhortOut$table %>% mutate(Position = "NonRes")
+```
+
+### NonSci
+```{r km_NonSci_gender, fig.width=6, fig.height=4, dpi=200}
+corhortOut <- plotGender(careerData, "NonSci", showTable = FALSE, maxY=0.5, legendPos = "top")
+corhortOut$plot
+tab5_gender <- corhortOut$table %>% mutate(Position = "NonSci")
 ```
 
 ## Simplified career paths for alumni who have held different types of role (Supplementry Figure 1)
@@ -499,13 +538,6 @@ plot_grid(legendPlot)
 ```
 
 Function for producing Sankey diagram for career path 
-```{r}
-```
-
-
-```{r}
-```
-
 
 ```{r}
 plotSankey <- function(tempdata, role) {
@@ -821,7 +853,7 @@ Plot KM curves stratified by pre-postdoc
 plotOut <- km(testTab, "numPub",  maxTime = 25, titlePlot = "",
        titleLegend = "Number of\nfirst-author\npublications",
        xlab = sprintf("Time after %s (years)", "EMBL"),
-       ylab = paste0("Probability of being found as ",  "AcPI")) +
+       ylab = paste0("Probability of being found as ",  "AcPI"), maxY=0.7) +
   theme(legend.position = "right")
 
 
@@ -848,14 +880,14 @@ tab1 <- pubOut$table %>% mutate(Position = "AcPI")
 
 ### AcOt
 ```{r km_AcOt_numPub,fig.width=6, fig.height=4, dpi=200}
-pubOut <- plotPublication(careerData, "AcOt", showTable = FALSE)
+pubOut <- plotPublication(careerData, "AcOt", showTable = FALSE, maxY= 0.7)
 pubOut$plot
 tab2 <- pubOut$table %>% mutate(Position = "AcOt")
 ```
 
 ### IndR
 ```{r km_IndR_numPub,fig.width=6, fig.height=4, dpi=200}
-pubOut <- plotPublication(careerData, "IndR", showTable = FALSE)
+pubOut <- plotPublication(careerData, "IndR", showTable = FALSE, maxY = 0.7)
 pubOut$plot
 tab3 <- pubOut$table %>% mutate(Position = "IndR")
 ```
@@ -863,14 +895,14 @@ tab3 <- pubOut$table %>% mutate(Position = "IndR")
 
 ### NonRes
 ```{r km_NonRes_numPub, fig.width=6, fig.height=4, dpi=200}
-pubOut <- plotPublication(careerData, "NonRes", showTable = FALSE)
+pubOut <- plotPublication(careerData, "NonRes", showTable = FALSE, maxY=0.7)
 pubOut$plot
 tab4 <- pubOut$table %>% mutate(Position = "NonRes")
 ```
 
 ### NonSci
 ```{r km_NonSci_numPub, fig.width=6, fig.height=4, dpi=200}
-putOut <- plotPublication(careerData, "NonSci", showTable = FALSE)
+putOut <- plotPublication(careerData, "NonSci", showTable = FALSE, maxY=0.7)
 putOut$plot
 tab5 <- putOut$table %>% mutate(Position = "NonSci")
 ```

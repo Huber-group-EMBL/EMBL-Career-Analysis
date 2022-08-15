@@ -145,7 +145,8 @@ km_noFacet <- function(testTab, strata, titlePlot = "", titleLegend = "Cohort", 
 
 # Function for Kaplan-Meier plot
 km <- function(testTab, strata, titlePlot = "", titleLegend = "Cohort", pval = NULL, maxTime =NULL,
-               ylab = "Fraction", xlab = "Time (years)", colList = NULL, facetBy = "type_pre_postdoc") {
+               ylab = "Fraction", xlab = "Time (years)", colList = NULL, 
+               facetBy = "type_pre_postdoc", maxY=1.0, legendPos = "top") {
 
   # function for km plot
   survS <- tibble(time = testTab$timeToPos,
@@ -173,19 +174,23 @@ km <- function(testTab, strata, titlePlot = "", titleLegend = "Cohort", pval = N
   } else {
     colorPal <- colList[1:length(levels(survS$group))]
   }
+  
+  if (legendPos == "top") lePos <- c(0.85,0.75) else lePos <- c(0.85, 0.20)
 
   p <- ggsurvplot(survfit(Surv(time, endpoint) ~ group, data = survS),
                   data = survS, pval = FALSE,  conf.int = FALSE,
                   fun = "event", facet.by = "facetCol",
                   ylab = ylab, xlab = xlab, title = titlePlot,
-                  xlim = c(0, maxTime), break.time.x=5,
+                  xlim = c(0, maxTime), ylim=c(0,maxY),break.time.x=5,
                   legend.labs = levels(survS$group), short.panel.labs = TRUE,
                   palette = colorPal, legend.title = titleLegend, fontsize=4) +
     geom_hline(yintercept = 1, lty = "dashed") +
     theme_classic() +
     theme(axis.text = element_text(size=15), axis.title = element_text(size=15),
           plot.title = element_text(size=15, face ="bold"), legend.text = element_text(size=12),
-          legend.title = element_text(size=12), legend.position = c(0.85,0.75),
+          legend.title = element_text(size=12), legend.position = lePos,
+          legend.key = element_rect(fill = "transparent", color = "transparent"),
+          legend.background = element_rect(fill = NA, color = NA),
           strip.background  = element_rect(fill = "grey80", color=NA), strip.text = element_text(size=15, face = "bold"))
 
   return(p)
@@ -212,7 +217,8 @@ pairwiseTest <- function(testTab, strata) {
 }
 
 #Function for KM plot using cohort as strata
-plotCohort <- function(careerData, type, PhDorEMBL = "EMBL", titlePlot = "", showTable = FALSE) {
+plotCohort <- function(careerData, type, PhDorEMBL = "EMBL", titlePlot = "", 
+                       showTable = FALSE, maxY=1.0, legendPos = "top") {
 
   #get survival table
   survT <- processSurvivalTable(careerData, type,PhDorEMBL)
@@ -233,7 +239,8 @@ plotCohort <- function(careerData, type, PhDorEMBL = "EMBL", titlePlot = "", sho
 
   plotOut <- km(testTab, "cohort",  maxTime = 25, titlePlot = type,
                 xlab = sprintf("Time after %s (years)", PhDorEMBL),
-                ylab = paste0("Probability of being found as ", type)) +
+                ylab = paste0("Probability of being found as ", type),
+                maxY = maxY, legendPos = legendPos) +
     theme(plot.title = element_text(size=18, hjust=0.5))
 
 
@@ -246,6 +253,48 @@ plotCohort <- function(careerData, type, PhDorEMBL = "EMBL", titlePlot = "", sho
 
   return(list(plot = plotOut, table = tabOut))
 
+}
+
+
+#Function for KM plot using gender as strata
+plotGender <- function(careerData, type, PhDorEMBL = "EMBL", titlePlot = "", 
+                       showTable = FALSE, maxY=1.0, legendPos = "top") {
+    
+    #get survival table
+    survT <- processSurvivalTable(careerData, type,PhDorEMBL)
+    
+    testTab <- select(survT,unique_ID, ifPos, timeToPos) %>%
+        left_join(select(careerData, unique_ID, type_pre_postdoc, gender), by = "unique_ID") %>%
+        filter(!is.na(gender)) %>%
+        mutate(gender = ifelse(gender == "m","male","female")) %>%
+        mutate(gender = factor(gender),
+               type_pre_postdoc = ifelse(type_pre_postdoc == "predoc","PhD alumni",
+                                         ifelse(type_pre_postdoc == "postdoc","Postdoc alumni",NA))) %>%
+        mutate(type_pre_postdoc = factor(type_pre_postdoc, levels = c("PhD alumni","Postdoc alumni")))
+    
+    print("Total subject number stratified by pre/post-doc")
+    print(table(testTab$type_pre_postdoc))
+    print("Event number stratified by pre/post-doc")
+    print(table(filter(testTab, ifPos)$type_pre_postdoc))
+    
+    
+    plotOut <- km(testTab, "gender",  maxTime = 25, titlePlot = type,
+                  titleLegend = "Gender",
+                  xlab = sprintf("Time after %s (years)", PhDorEMBL),
+                  ylab = paste0("Probability of being found as ", type),
+                  maxY = maxY, legendPos = legendPos) +
+        theme(plot.title = element_text(size=18, hjust=0.5))
+    
+    
+    
+    tabOut <-  lapply(levels(testTab$type_pre_postdoc), function(n) {
+        eachTab <- filter(testTab, type_pre_postdoc == n)
+        pairwiseTest(eachTab, "gender") %>%
+            mutate(Alumni = str_remove(n," alumni"))
+    }) %>% bind_rows()
+    
+    return(list(plot = plotOut, table = tabOut))
+    
 }
 
 
@@ -545,7 +594,7 @@ plotHarrelsC <- function(careerData, type, preOrPost = "both", method = "CV") {
 }
 
 #Function for KM plot using publication as strata
-plotPublication <- function(careerData, type, PhDorEMBL = "EMBL", showTable = TRUE) {
+plotPublication <- function(careerData, type, PhDorEMBL = "EMBL", showTable = TRUE, maxY=1.0, legendPos = "top") {
 
   #get survival table
   survT <- processSurvivalTable(careerData, type,PhDorEMBL)
@@ -568,9 +617,9 @@ plotPublication <- function(careerData, type, PhDorEMBL = "EMBL", showTable = TR
   plotOut <- km(testTab, "numPub",  maxTime = 25, titlePlot = type,
                 titleLegend = "Number of\nfirst-author\npublications",
                 xlab = sprintf("Time after %s (years)", PhDorEMBL),
-                ylab = paste0("Probability of being found as ", type)) +
-    theme(legend.position = c(0.86,0.65),
-          plot.title = element_text(size=18, hjust=0.5))
+                ylab = paste0("Probability of being found as ", type),
+                maxY = maxY, legendPos = legendPos) +
+    theme(plot.title = element_text(size=18, hjust=0.5))
 
 
   tabOut <-  lapply(levels(testTab$type_pre_postdoc), function(n) {
